@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const auth = require('./routes/auth');
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -16,3 +17,5 @@ app.use(
 app.listen(port, () => {
   console.log(`Connected to port ${port}.`);
 });
+
+app.use('/auth', auth);
