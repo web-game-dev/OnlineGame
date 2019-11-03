@@ -1,5 +1,6 @@
 {
   "clientID": "dungeon_client_id",
   "clientSecret": "dungeon_client_secret",
-  "db": "dungeon_db"
+  "db": "dungeon_db",
+  "cookieKey": "dungeon_cookie_key"
 }
