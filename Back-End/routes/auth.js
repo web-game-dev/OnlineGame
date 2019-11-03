@@ -15,7 +15,7 @@ router.get('/logout', (req, res) => {
 
 // If user wants to login with google
 router.get('/google', passport.authenticate('google', {
-  scope: ['profile']
+  scope: ['profile', 'email']
 }));
 
 // this is handeled on the backend

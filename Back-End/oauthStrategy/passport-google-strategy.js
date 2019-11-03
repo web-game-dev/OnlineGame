@@ -29,6 +29,10 @@ passport.use(new GoogleStrategy({
   clientSecret: config.get('clientSecret'),
 }, async (accessToken, refreshToken, profile, done) => {
 
+    console.log('accesToken', accessToken);
+    console.log('refreshToken', refreshToken);
+    console.log('profile', profile.emails[0].value);
+
     console.log('start of finding user');
     let user = await User.findOne({
       google: {
@@ -45,6 +49,7 @@ passport.use(new GoogleStrategy({
       user = new User({
         method: 'google',
         google: {
+          email: profile.emails[0].value,
           googleId: profile.id,
         },
       });
