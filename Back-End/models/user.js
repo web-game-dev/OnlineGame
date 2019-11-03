@@ -1,4 +1,4 @@
-const mongoose = require(mongoose);
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
   method: {
@@ -10,6 +10,11 @@ const userSchema = new mongoose.Schema({
       type: String,
       lowercase: true,
     },
+    password: {
+      type: String,
+      min: 5,
+      max: 255,
+    }
   },
   google: {
     email: {
