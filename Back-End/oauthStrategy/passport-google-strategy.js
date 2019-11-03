@@ -36,14 +36,15 @@ passport.use(new GoogleStrategy({
     console.log('start of finding user');
     let user = await User.findOne({
       google: {
+        email: profile.emails[0].value,
         googleId: profile.id,
     }});
-
+    console.log(profile.id);
     console.log('end of finding user');
 
     if (user) {
       console.log('user exists', user);
-      done(null, user); 
+      return done(null, user); 
     }
     else {
       user = new User({
