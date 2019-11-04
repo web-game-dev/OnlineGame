@@ -3,11 +3,11 @@ const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
 const auth = require('../middleware/auth');
-const { User, validateUser} = require('../models/user');
+const { User, validateUser, validateUserLogin } = require('../models/user');
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
-  const { error } = validateUser(req.body);
+  const { error } = validateUserLogin(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ "local.email": req.body.email });
