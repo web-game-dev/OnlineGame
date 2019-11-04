@@ -10,7 +10,8 @@ const password = document.getElementById("password").value;
 //   document.getElementById("regist").innerHTML = "Sign Up Successful!";
 // }
 
-var regBtn = document.getElementById("regRtn");
-regBtn.onclick = function(){
+const regBtn = document.getElementById("registerBtn");
 
+regBtn.onclick = function(){
+    console.log(name);
 }
