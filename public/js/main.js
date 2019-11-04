@@ -52,7 +52,4 @@
         $(thisAlert).removeClass('alert-validate');
     }
 
-
-    // function
-
 })(jQuery);
