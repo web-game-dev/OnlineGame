@@ -11,4 +11,6 @@ app.get('/signup', (req,res) => res.render('pages/register'));
 
 // app.get('/registerDone', (req,res) => res.redirect('/'));
 
+// app.send("signupAction", (req,res) => req.body.email, req.body.password);
+
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
