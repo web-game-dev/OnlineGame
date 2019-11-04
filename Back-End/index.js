@@ -2,8 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const config = require('config');
-const passport = require('passport');
-const coookieSession = require('cookie-session');
 const auth = require('./routes/auth');
 const passportSetup = require('./oauthStrategy/passport-google-strategy');
 
@@ -18,14 +16,6 @@ app.use(
     extended: true,
   })
 );
-
-app.use(coookieSession({
-  maxAge: 86400000, // 24 hours in ms
-  keys: [config.get('cookieKey')],
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 const db = config.get('db');
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
