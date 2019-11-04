@@ -22,6 +22,7 @@ app.use(
 app.use(coookieSession({
   maxAge: 86400000, // 24 hours in ms
   keys: [config.get('cookieKey')],
+  name: 'dungeon_cookie',
 }));
 
 app.use(passport.initialize());
