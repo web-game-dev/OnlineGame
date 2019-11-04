@@ -12,6 +12,7 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => res.render('pages/index'));
 app.get('/signup', (req,res) => res.render('pages/register'));
+app.get('/demo', (req,res) => res.render('pages/demo'));
 
 // app.get('/registerDone', (req,res) => res.redirect('/'));
 
