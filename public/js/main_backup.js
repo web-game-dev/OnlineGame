@@ -9,15 +9,11 @@
 
     $('.validate-form').on('submit',function(){
         var check = true;
-    
-        // var email = $("#email").val();
-        // var password = $("#pass").val();
-        var email = document.getElementById("email");
-        var password = document.getElementById("password");
-        // console.log(email, password);
-        console.log(email);
-        console.log(password);
 
+        var email = document.getElementById("email");    
+        var password = $("#password").val();
+        // var password = document.getElementById("password");
+        console.log(email, password);
 
         for(var i=0; i<input.length; i++) {
             if(validate(input[i]) == false){
@@ -64,8 +60,8 @@
 
 })(jQuery);
 
-// var email = $("#email").val();
-var password = $("#password").val();
+// var email = document.getElementById("email");
+// var password = $("#password").val();
 
 // console.log(email, password);
-console.log(password);
+// console.log(password);
