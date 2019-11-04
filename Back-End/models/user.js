@@ -9,6 +9,9 @@ const userSchema = new mongoose.Schema({
     enum: ['local', 'google'],
   },
   local: {
+    name: {
+      type: String,
+    },
     email: {
       type: String,
     },
@@ -19,6 +22,9 @@ const userSchema = new mongoose.Schema({
     }
   },
   google: {
+    name: {
+      type: String,
+    },
     email: {
       type: String,
     },
@@ -37,6 +43,7 @@ const User = mongoose.model('User', userSchema);
 
 function validateUser(user) {
   const schema = {
+    name: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required()
   };

@@ -18,9 +18,9 @@ passport.use(new GoogleStrategy({
   clientID: config.get('clientID'),
   clientSecret: config.get('clientSecret'),
 }, async (accessToken, refreshToken, profile, done) => {
-
     let user = await User.findOne({ "google.googleId": profile.id });
     const localUser = await User.findOne({ "local.email": profile.emails[0].value});
+    
     if (user || localUser) {
       return done(null, user); 
     }
@@ -28,6 +28,7 @@ passport.use(new GoogleStrategy({
       user = new User({
         method: 'google',
         google: {
+          name: profile._json.name,
           email: profile.emails[0].value,
           googleId: profile.id,
         },
