@@ -13,16 +13,6 @@ if(!config.get('clientSecret')) {
   process.exit(1);
 }
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-  const user = User.findById(id);
-  if (!user) return;
-  done(null, user);
-});
-
 passport.use(new GoogleStrategy({
   callbackURL: '/auth/google/redirect',
   clientID: config.get('clientID'),
@@ -32,7 +22,6 @@ passport.use(new GoogleStrategy({
     let user = await User.findOne({ "google.googleId": profile.id });
     const localUser = await User.findOne({ "local.email": profile.emails[0].value});
     if (user || localUser) {
-      console.log('user exists', user);
       return done(null, user); 
     }
     else {
