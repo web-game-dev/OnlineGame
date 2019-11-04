@@ -14,7 +14,7 @@ if(!config.get('clientSecret')) {
 }
 
 passport.use(new GoogleStrategy({
-  callbackURL: '/auth/google/redirect',
+  callbackURL: 'https://dungeon-crawler-back-end.herokuapp.com/auth/google/redirect',
   clientID: config.get('clientID'),
   clientSecret: config.get('clientSecret'),
 }, async (accessToken, refreshToken, profile, done) => {
