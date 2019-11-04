@@ -1,18 +1,29 @@
 const express = require('express');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
+const _ = require('lodash');
 const auth = require('../middleware/auth');
 const { User, validateUser} = require('../models/user');
 const router = express.Router();
 
-router.get('/login', (req, res) => {
-  console.log('login');
+router.post('/login', async (req, res) => {
+  const { error } = validateUser(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  let user = await User.findOne({ "local.email": req.body.email });
+  if (!user) return res.status(400).send('Invalid email or password');
+
+  const validPassword = await bcrypt.compare(req.body.password, user.local.password);
+  if (!validPassword) return res.status(400).send('Invalid password');
+
+  const token = user.generateAuthToken();
+  res.send(token);
 });
 
 // local registration
 router.post('/register', async (req, res) => {
   const { error } = validateUser(req.body);
-  if (error) return res.status(400).send('Invalid email or password');
+  if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ "local.email": req.body.email });
   if (user) return res.status(400).send('Email exists');
@@ -38,9 +49,8 @@ router.post('/register', async (req, res) => {
       console.log('err');
   });
 
-  res.cookie('dungeon_cookie', result, {
-    maxAge:86400000
-  });
+  const token = user.generateAuthToken();
+  res.send(token);
 });
 
 // If user wants to login with google
@@ -48,20 +58,11 @@ router.get('/google', passport.authenticate('google', {
   scope: ['profile', 'email']
 }));
 
-router.get('/test', auth, (req, res) => {
-  res.send('logged in');
-});
-
 // this is handeled on the backend
-router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-  res.send(req.user);
+router.get('/google/redirect', passport.authenticate('google', { session: false }), (req, res) => {
+  const user = req.user;
+  const token = user.generateAuthToken();
+  res.send(token);
 });
-
-// logs out users
-router.get('/logout', (req, res) => {
-  req.logout();
-  res.send('logged out');
-});
-
 
 module.exports = router;
