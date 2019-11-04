@@ -35,6 +35,7 @@ router.post('/register', async (req, res) => {
   user = new User({
     method: 'local',
     local: {
+      name: req.body.name,
       email: req.body.email,
       password: req.body.password,
     },
