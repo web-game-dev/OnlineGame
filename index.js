@@ -63,7 +63,7 @@ app.post('/login', (req, res) => {
         // this.setState(axiosRes);
     // };
     console.log(typeof respMsg);
-    res.status(401).end('Incorrect Email and/or Password! Please try again.');
+    res.status(401).end('Incorrect Email and/or Password! Please go back and login again.');
 });
 
 app.post('/register', (req, res) => {
@@ -97,7 +97,7 @@ app.post('/register', (req, res) => {
       });
 
     console.log(respMsg.data);
-    res.status(401).end('Incorrect Email and/or Password! Please sign up again.');
+    res.status(401).end('Incorrect Email and/or Password! Please go back and sign up again.');
     //res.end();
     //res.redirect("/");
 });
