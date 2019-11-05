@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 module.exports = function(req, res, next) {
 
   const token = req.header('dungeon_token');
-  console.log(token);
+  
   if(!token) return res.status(401).send('Access denied. No token provided.');
 
   try {
