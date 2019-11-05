@@ -55,7 +55,8 @@ app.post('/login', (req, res) => {
             console.error("ERROR:", error.response.data);
             // respMsg = error.response;
             // alert("ERROR:", error.response.data);
-            res.end(error.response);
+            //res.end(error.response);
+            res.status(401).end('Incorrect Email and/or Password! Please go back and sign up again.');
           });
         // console.log(axiosRes.data)
         // let { data } = axiosRes.data;
@@ -63,7 +64,7 @@ app.post('/login', (req, res) => {
         // this.setState(axiosRes);
     // };
     console.log(typeof respMsg);
-    res.status(401).end('Incorrect Email and/or Password! Please go back and login again.');
+
 });
 
 app.post('/register', (req, res) => {
@@ -91,13 +92,14 @@ app.post('/register', (req, res) => {
       .catch(error => {
         // console.error(error)
         console.error("ERROR:", error.response.data);
+        res.status(401).end('Incorrect Email and/or Password! Please go back and sign up again.');
         // respMsg = error.response;
         // alert("ERROR:", error.response.data);
         //error.end(error);
       });
 
     console.log(respMsg.data);
-    res.status(401).end('Incorrect Email and/or Password! Please go back and sign up again.');
+    //res.status(401).end('Incorrect Email and/or Password! Please go back and sign up again.');
     //res.end();
     //res.redirect("/");
 });
