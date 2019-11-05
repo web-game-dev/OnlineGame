@@ -10,11 +10,6 @@
     $('.validate-form').on('submit',function(){
         var check = true;
 
-        var email = document.getElementById("email");    
-        var password = $("#password").val();
-        // var password = document.getElementById("password");
-        console.log(email, password);
-
         for(var i=0; i<input.length; i++) {
             if(validate(input[i]) == false){
                 showValidate(input[i]);
@@ -59,9 +54,3 @@
 
 
 })(jQuery);
-
-// var email = document.getElementById("email");
-// var password = $("#password").val();
-
-// console.log(email, password);
-// console.log(password);
