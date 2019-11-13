@@ -1,6 +1,7 @@
 const express = require('express')
-const MongoClient = require('mongodb').MongoClient;
+// const MongoClient = require('mongodb').MongoClient;
 const axios = require('axios')
+
 const path = require('path')
 const PORT = process.env.PORT || 5000
 const app = express();
@@ -20,18 +21,18 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/signIn'));
 app.get('/signin', (req, res) => res.render('pages/signIn'));
 app.get('/signup', (req,res) => res.render('pages/register'));
-app.get('/demo', (req,res) => res.render('pages/demo'));
+// app.get('/demo', (req,res) => res.render('pages/demo'));
 
-var token = "";
+let token = "";
 
-app.post('/login', (req, res) => {
-    const register_uri = "https://dungeon-crawler-back-end.herokuapp.com/auth/login";
+app.post('/login', async (req, res) => {
+    const login_uri = "https://dungeon-crawler-back-end.herokuapp.com/auth/login";
 
-    // var name = req.body.username;
-    var email = req.body.email;
-    var pw = req.body.password;
+    // const name = req.body.username;
+    const email = req.body.email;
+    const pw = req.body.password;
 
-    var data = {
+    const data = {
         // "name": name,
         "email": email,
         "password": pw,
@@ -39,42 +40,34 @@ app.post('/login', (req, res) => {
 
     // console.log("DATA is " + JSON.stringify(data));
 
-    // respMsg = () => {
-        // let axiosRes = await axios.get(register_uri, data)
-        // let axiosRes = axios.post(register_uri, data)
-    const respMsg = axios.post(register_uri, data)
+    await axios.post(login_uri, data)
           .then(response => {
-            console.log(`statusCode: ${response.status}, ${response.statusText}`)
-            // console.log(response);
-            // respMsg = response;
+            console.log(response);
+            console.log(`statusCode: ${response.status}, ${response.statusText}`);
+            token = response.data;
             // request.session.loggedin = true;
             // request.session.username = username;
-            res.redirect("/demo");
+            res.render("pages/demo");
           })
           .catch(error => {
-            console.error("ERROR:", error.response.data);
-            // respMsg = error.response;
-            // alert("ERROR:", error.response.data);
-            //res.end(error.response);
-            res.status(401).end('Incorrect Email and/or Password! Please go back and sign up again.');
+            console.error("ERROR:", error.response);
+            // alert(error.response.data);         
+            // res.status(401).end(error.response.data);
+            res.redirect('/#error');
           });
-        // console.log(axiosRes.data)
-        // let { data } = axiosRes.data;
         // this.setState({ users: data });
         // this.setState(axiosRes);
     // };
-    console.log(typeof respMsg);
-
 });
 
 app.post('/register', (req, res) => {
     const register_uri = "https://dungeon-crawler-back-end.herokuapp.com/auth/register";
 
-    var name = req.body.username;
-    var email = req.body.email;
-    var pw = req.body.password;
+    const name = req.body.username;
+    const email = req.body.email;
+    const pw = req.body.password;
 
-    var data = {
+    const data = {
         "name": name,
         "email": email,
         "password": pw,
@@ -87,7 +80,7 @@ app.post('/register', (req, res) => {
         console.log(`statusCode: ${response.status}, ${response.statusText}`)
         // console.log(response);
         // respMsg = response;
-        res.redirect("/demo");
+        res.render("pages/demo");
       })
       .catch(error => {
         // console.error(error)
