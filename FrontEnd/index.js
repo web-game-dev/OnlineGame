@@ -2,7 +2,6 @@
 const express = require('express')
 const session = require('express-session');
 const path = require('path')
-// const MongoClient = require('mongodb').MongoClient;
 const axios = require('axios')
 
 const PORT = process.env.PORT || 5000
@@ -25,14 +24,22 @@ const auth = function(req, res, next) {
     if (req.session && req.session.loggedin && req.session.email) return next();
     else return res.status(401).send("Unauthorized. Please log in and try again.");;
 };
+const loggedInAlert = function(req, res, next) {
+    // console.log(req.session);
+    if (req.session.loggedin) return res.send("Already logged-in. Please logout first or return back home.");
+    else return next();
+};
 /*******/
 
 /*** Views Rendering ***/
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.get('/', (req, res) => res.render('pages/signIn'));
-app.get('/signin', (req, res) => res.render('pages/signIn'));
-app.get('/signup', (req,res) => res.render('pages/register'));
+app.get('/', (req, res) => {
+    if (req.session.loggedin) res.redirect('game');
+    else res.redirect('signin')
+});
+app.get('/signin', loggedInAlert, (req, res) => res.render('pages/signIn'));
+app.get('/signup', loggedInAlert, (req,res) => res.render('pages/register'));
 app.get('/logout', function (req, res) {
     req.session.destroy();
     res.send("Logout Successful!");
