@@ -1,4 +1,22 @@
-import { validate, showValidate } from '../utility/validation'
+
+function validate (input) {
+  if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
+    if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
+      return false;
+    }
+  }
+  else {
+    if($(input).val().trim() == ''){
+      return false;
+    }
+  }
+  return true;
+}
+
+function showValidate(input) {
+  var thisAlert = $(input).parent();
+  $(thisAlert).addClass('alert-validate');
+}
 
 async function postUser() {
   const data = {};
@@ -9,7 +27,6 @@ async function postUser() {
     check = false;
     showValidate(nameValidate);
   }
-  
   if (validate(nameValidate)) {
     check = true;
     const name = document.getElementById("name").value;
