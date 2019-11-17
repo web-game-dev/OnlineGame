@@ -1,12 +1,14 @@
-const express = require('express')
+const express = require('express');
+const cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
-const axios = require('axios')
-const path = require('path')
-const PORT = process.env.PORT || 5000
+const axios = require('axios');
+const path = require('path');
 const app = express();
+
+const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
-
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
