@@ -4,6 +4,8 @@ const axios = require('axios')
 const path = require('path')
 const PORT = process.env.PORT || 5000
 const app = express();
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
@@ -100,6 +102,3 @@ app.post('/register', (req, res) => {
     res.end();
     // res.redirect("/demo");
 });
-
-
-app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
