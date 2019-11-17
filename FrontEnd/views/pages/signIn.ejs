@@ -21,7 +21,7 @@
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
 			<div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33">
-				<form class="login100-form validate-form flex-sb flex-w" method="post" action="/login">
+				<form class="login100-form validate-form flex-sb flex-w" id="loginForm">
 					<span class="login100-form-title p-b-53">
 						Sign In With
 					</span>
@@ -44,7 +44,7 @@
 						</span>
 					</div>
 					<div class="wrap-input100 validate-input" data-validate = "Email is required">
-						<input class="input100" type="text" name="email" >
+						<input class="input100" type="text" name="email" id="loginEmail">
 						<span class="focus-input100"></span>
 					</div>
 
@@ -52,17 +52,14 @@
 						<span class="txt1">
 							Password
 						</span>
-						<!-- <a href="#" class="txt2 bo1 m-l-5">
-							Forgot?
-						</a> -->
 					</div>
 					<div class="wrap-input100 validate-input" data-validate = "Password is required">
-						<input class="input100" type="password" name="password" >
+						<input class="input100" type="password" name="password" id="loginPassword">
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="container-login100-form-btn m-t-31">
-						<button class="login100-form-btn" type= "submit" id="loginBtn">
+						<button class="login100-form-btn" type= "submit" id="loginBtn" onclick="loginUser(); return false;">
 							Sign In
 						</button>
 					</div>
@@ -88,23 +85,18 @@
 
 
 	<div id="dropDownSelect1"></div>
-
-<!--===============================================================================================-->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
 	<script src="vendor/animsition/js/animsition.min.js"></script>
-<!--===============================================================================================-->
 	<script src="vendor/bootstrap/js/popper.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
 	<script src="vendor/select2/select2.min.js"></script>
-<!--===============================================================================================-->
 	<script src="vendor/daterangepicker/moment.min.js"></script>
 	<script src="vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
 	<script src="vendor/countdowntime/countdowntime.js"></script>
-<!--===============================================================================================-->
 	<script src="js/field_validation.js"></script>
+  <script src="db/login.js"></script>
+
 
 </body>
 </html>
