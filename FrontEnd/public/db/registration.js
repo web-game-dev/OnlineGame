@@ -2,11 +2,13 @@
 function validate (input) {
   if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
     if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
+      showValidate(input);
       return false;
     }
   }
   else {
     if($(input).val().trim() == ''){
+      showValidate(input);
       return false;
     }
   }
@@ -20,37 +22,41 @@ function showValidate(input) {
 
 async function postUser() {
   const data = {};
-  let check = false;
+  let validName = false;
+  let validEmail = false;
+  let validPassword = false;
+
 
   const nameValidate = document.getElementById("name");
   if (!nameValidate.value) {
-    check = false;
+    validName = false;
     showValidate(nameValidate);
   }
   if (validate(nameValidate)) {
-    check = true;
+    validName = true;
     const name = document.getElementById("name").value;
     data.name = name;
   }
 
   const emailValidate = document.getElementById("email");
   if (!emailValidate.value) {
-    check = false;
+    validEmail = false;
     showValidate(emailValidate);
   }
+
   if (validate(emailValidate)) {
-    check = true;
+    validEmail = true;
     const email = document.getElementById("email").value;
     data.email = email;
   }
 
   const passwordValidate = document.getElementById("password");
   if (!passwordValidate.value) {
-    check = false;
+    validPassword = false;
     showValidate(passwordValidate);
   }
   if (validate(passwordValidate)) {
-    check = true;
+    validPassword = true;
     const password = document.getElementById("password").value;
     data.password = password;
   }
@@ -58,7 +64,7 @@ async function postUser() {
   registrationUrl = "https://dungeon-crawler-back-end.herokuapp.com/auth/register";
   redirectUrl = "https://dungeon-crawler-98765.herokuapp.com/demo";
   
-  if (check) {
+  if (validName && validEmail && validPassword) {
     await axios.post(registrationUrl, data)
       .then((res) => {
         const token = res.data;
