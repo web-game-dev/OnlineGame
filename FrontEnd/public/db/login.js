@@ -54,6 +54,7 @@ async function loginUser() {
     await axios.post(loginUrl, data)
       .then((res) => {
         const token = res.data;
+        localStorage.setItem("token", token);
         window.location.replace(redirectUrl);
       })
       .catch(err => {

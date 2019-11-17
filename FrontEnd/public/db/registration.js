@@ -68,6 +68,7 @@ async function postUser() {
     await axios.post(registrationUrl, data)
       .then((res) => {
         const token = res.data;
+        localStorage.setItem("token", token);
         window.location.replace(redirectUrl);
       })
       .catch(err => {
