@@ -1,6 +1,7 @@
 *.meta
 [Ll]ogs/
 [Ll]ibrary/
+#[Bb]uilds?/
 
 # ===========================
 # Default Collab Ignore Rules
@@ -32,6 +33,5 @@ ehthumbs.db
 # Unity generated
 # ===============
 [Oo]bj/
-[Bb]uilds?/
 sysinfo.txt
 *.stackdump
