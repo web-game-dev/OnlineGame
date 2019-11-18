@@ -1,10 +1,16 @@
 
 
 
-async function google() {
+async function googleLogin() {
 
-  googleUrl = "https://dungeon-crawler-back-end.herokuapp.com/auth/google";
+  const googleUrl = "http://localhost:3000/googleToken";
+  // const googleUrl = "http://localhost:3000/auth/google";
+  // const result = window.location.assign("http://localhost:3000/googleToken");
+  // console.log(result);
+  const result = await axios.get(googleUrl)
+    .catch(err => {
+      console.log(err);
+    });
 
-  const result = await axios.get(googleUrl);
   console.log(result);
 }
