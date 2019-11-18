@@ -16,5 +16,54 @@ describe('user.generateAuthToken', () => {
   });
 });
 
+describe('validateUser', () => {
 
+  const user = {
+    name: 'test',
+    email: 'email@domain.com',
+    password: 'password@domain.com'
+  }
 
+  it('should not return an error if input is valid', () => {
+    const result = validateUser(user);
+    expect(result.error).toBeNull();
+  });
+
+  it('should return an error if name is missing', () => {
+    user.name = '';
+    const result = validateUser(user);
+    expect(result.error).not.toBeNull();
+  });
+
+  it('should return an error if email is missing', () => {
+    user.email = '';
+    const result = validateUser(user);
+    expect(result.error).not.toBeNull();
+  });
+
+  it('should return an error if email does not have @domain.com', () => {
+    const user = {
+      name: 'test',
+      email: 'email',
+      password: 'password'
+    }
+    const result = validateUser(user);
+    expect(result.error).not.toBeNull();
+  });
+
+  it('should return an error if email has @ and not domain.com', () => {
+    const user = {
+      name: 'test',
+      email: 'email@',
+      password: 'password'
+    }
+    const result = validateUser(user);
+    expect(result.error).not.toBeNull();
+  });
+
+  it('should return an error if password is missing', () => {
+    user.password = '';
+    const result = validateUser(user);
+    expect(result.error).not.toBeNull();
+  });
+});

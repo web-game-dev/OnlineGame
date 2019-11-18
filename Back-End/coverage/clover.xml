@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1574110940078" clover="3.2.0">
-  <project timestamp="1574110940078" name="All files">
-    <metrics statements="17" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="1" elements="20" coveredelements="14" complexity="0" loc="17" ncloc="17" packages="1" files="1" classes="1"/>
+<coverage generated="1574112153672" clover="3.2.0">
+  <project timestamp="1574112153673" name="All files">
+    <metrics statements="17" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2" elements="20" coveredelements="17" complexity="0" loc="17" ncloc="17" packages="1" files="1" classes="1"/>
     <file name="user.js" path="/home/taranpreet/Sfu/CMPT276/OnlineGame/Back-End/models/user.js">
-      <metrics statements="17" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="1"/>
+      <metrics statements="17" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
       <line num="1" count="1" type="stmt"/>
       <line num="2" count="1" type="stmt"/>
       <line num="3" count="1" type="stmt"/>
@@ -13,8 +13,8 @@
       <line num="38" count="1" type="stmt"/>
       <line num="39" count="1" type="stmt"/>
       <line num="42" count="1" type="stmt"/>
-      <line num="45" count="0" type="stmt"/>
-      <line num="50" count="0" type="stmt"/>
+      <line num="45" count="6" type="stmt"/>
+      <line num="50" count="6" type="stmt"/>
       <line num="54" count="0" type="stmt"/>
       <line num="58" count="0" type="stmt"/>
       <line num="62" count="1" type="stmt"/>
