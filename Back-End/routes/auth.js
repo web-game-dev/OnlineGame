@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
@@ -63,7 +64,7 @@ router.get('/google', passport.authenticate('google', {
 router.get('/google/redirect', passport.authenticate('google', { session: false }), (req, res) => {
   const user = req.user;
   const token = user.generateAuthToken();
-  res.send(token);
+  res.redirect("https://dungeon-crawler-98765.herokuapp.com/demo");
 });
 
 module.exports = router;
