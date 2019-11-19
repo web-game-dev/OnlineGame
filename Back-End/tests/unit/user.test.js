@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const { User, validateUser } = require('../models/user');
+const { User, validateUser, validateUserLogin } = require('../../models/user');
 
 
 describe('user.generateAuthToken', () => {
@@ -64,6 +64,42 @@ describe('validateUser', () => {
   it('should return an error if password is missing', () => {
     user.password = '';
     const result = validateUser(user);
+    expect(result.error).not.toBeNull();
+  });
+});
+
+describe('validateUserLogin', () => {
+  const user = {
+    email: 'email@gmail.com',
+    password: 'password'
+  }
+
+  it('should not return an error if input is valid', () => {
+    const result = validateUserLogin(user);
+    expect(result.error).toBeNull();
+  });
+
+  it('should return an error if password is missing', () => {
+    user.password = '';
+    const result = validateUserLogin(user);
+    expect(result.error).not.toBeNull();
+  });
+
+  it('should return an error if email is missing', () => {
+    user.email = '';
+    const result = validateUserLogin(user);
+    expect(result.error).not.toBeNull();
+  });
+
+  it('should return an error if email does not have @domain.com', () => {
+    user.email = 'email';
+    const result = validateUserLogin(user);
+    expect(result.error).not.toBeNull();
+  });
+
+  it('should return an error if email has @ and not domain.com', () => {
+    user.email = 'email@s';
+    const result = validateUserLogin(user);
     expect(result.error).not.toBeNull();
   });
 });
