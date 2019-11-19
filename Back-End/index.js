@@ -21,12 +21,15 @@ app.use(
   })
 );
 
-const db = config.get('db');
+// const db = config.get('db');
+// for testing
+const db = "mongodb://localhost/dungeonCrawler_tests";
+
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => { console.log(`connected to ${db}...`)})
   .catch((err) => console.log('Could not connect to ${db}', err));
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Connected to port ${port}.`);
 });
 
@@ -39,3 +42,5 @@ app.use(function(req, res, next) {
 });
 
 app.use('/auth', auth);
+
+module.exports = server;

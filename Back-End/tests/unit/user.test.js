@@ -98,7 +98,7 @@ describe('validateUserLogin', () => {
   });
 
   it('should return an error if email has @ and not domain.com', () => {
-    user.email = 'email@s';
+    user.email = 'email@';
     const result = validateUserLogin(user);
     expect(result.error).not.toBeNull();
   });

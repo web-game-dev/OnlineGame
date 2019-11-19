@@ -1,7 +1,10 @@
 {
   "name": "back-end",
+  "jest": {
+    "testURL": "http://localhost/"
+  },
   "version": "1.0.0",
-  "description": "test",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll --verbose --coverage",
@@ -28,6 +31,7 @@
     "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
-    "jest": "^24.9.0"
+    "jest": "^24.9.0",
+    "supertest": "^3.0.0"
   }
 }
