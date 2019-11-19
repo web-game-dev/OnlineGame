@@ -35,7 +35,7 @@ const loggedInAlert = function(req, res, next) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
-    if (req.session.loggedin) res.redirect('demo');
+    if (req.session.loggedin) res.redirect('game');
     else res.redirect('signin')
 });
 app.get('/signin', loggedInAlert, (req, res) => res.render('pages/signIn'));
@@ -44,7 +44,8 @@ app.get('/logout', function (req, res) {
     req.session.destroy();
     res.send("Logout Successful!");
 });
-app.get('/demo', auth, (req, res) => res.render("pages/demo"));
+app.get('/game', auth, (req, res) => res.render("pages/demo"));
+app.get('/demo', (req, res) => res.render("pages/demo"));
 /*******/
 
 /*** POST Requests ***/
@@ -69,11 +70,11 @@ app.post('/login', async (req, res) => {
             req.session.secret = axiosResp.data;
             req.session.email = email;
             // console.log(req.session);
-            res.redirect("/demo");
+            res.redirect("/game");
         })
             .catch(error => {
             console.error("ERROR:", error.response);
-            // alert(error.response.data);         
+            // alert(error.response.data);
             res.status(401).send(error.response.data + ". Please return to the previous page and try again.");
             // res.redirect('/#error');
         });
@@ -101,7 +102,7 @@ app.post('/register', async (req, res) => {
             req.session.name = name;
             req.session.email = email;
             // console.log(req.session);
-            res.redirect("/demo");
+            res.redirect("/game");
         })
         .catch(error => {
             console.error("ERROR:", error.response);
