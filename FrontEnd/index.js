@@ -45,6 +45,7 @@ app.get('/logout', function (req, res) {
     res.send("Logout Successful!");
 });
 app.get('/game', auth, (req, res) => res.render("pages/demo"));
+app.get('/demo', (req, res) => res.render("pages/demo"));
 /*******/
 
 /*** POST Requests ***/
@@ -73,7 +74,7 @@ app.post('/login', async (req, res) => {
         })
             .catch(error => {
             console.error("ERROR:", error.response);
-            // alert(error.response.data);         
+            // alert(error.response.data);
             res.status(401).send(error.response.data + ". Please return to the previous page and try again.");
             // res.redirect('/#error');
         });
