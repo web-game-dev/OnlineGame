@@ -23,8 +23,8 @@ app.use(
 
 const db = config.get('db');
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => { console.log(`connected to MongoDB...`)})
-  .catch((err) => console.log('Could not connect to mongodb', err));
+  .then(() => { console.log(`connected to ${db}...`)})
+  .catch((err) => console.log('Could not connect to ${db}', err));
 
 app.listen(port, () => {
   console.log(`Connected to port ${port}.`);
