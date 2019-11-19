@@ -35,7 +35,7 @@ const loggedInAlert = function(req, res, next) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
-    if (req.session.loggedin) res.redirect('game');
+    if (req.session.loggedin) res.redirect('demo');
     else res.redirect('signin')
 });
 app.get('/signin', loggedInAlert, (req, res) => res.render('pages/signIn'));
@@ -44,7 +44,7 @@ app.get('/logout', function (req, res) {
     req.session.destroy();
     res.send("Logout Successful!");
 });
-app.get('/game', auth, (req, res) => res.render("pages/demo"));
+app.get('/demo', auth, (req, res) => res.render("pages/demo"));
 /*******/
 
 /*** POST Requests ***/
@@ -69,7 +69,7 @@ app.post('/login', async (req, res) => {
             req.session.secret = axiosResp.data;
             req.session.email = email;
             // console.log(req.session);
-            res.redirect("/game");
+            res.redirect("/demo");
         })
             .catch(error => {
             console.error("ERROR:", error.response);
@@ -101,7 +101,7 @@ app.post('/register', async (req, res) => {
             req.session.name = name;
             req.session.email = email;
             // console.log(req.session);
-            res.redirect("/game");
+            res.redirect("/demo");
         })
         .catch(error => {
             console.error("ERROR:", error.response);
