@@ -21,9 +21,9 @@ app.use(
   })
 );
 
-// const db = config.get('db');
+const db = config.get('db');
 // for testing
-const db = "mongodb://localhost/dungeonCrawler_tests";
+// const db = "mongodb://localhost/dungeonCrawler_tests";
 
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => { console.log(`connected to ${db}...`)})
