@@ -1,12 +1,37 @@
-# Node build artifacts
-node_modules
-npm-debug.log
+*.meta
+[Ll]ogs/
+[Ll]ibrary/
+#[Bb]uilds?/
 
-# Local development
-*.env
-*.dev
+# ===========================
+# Default Collab Ignore Rules
+# ===========================
+
+# OS Generated
+# ============
 .DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+[Tt]humbs.db
+[Dd]esktop.ini
 
-# Docker
-Dockerfile
-docker-compose.yml
+# Visual Studio / MonoDevelop generated
+# =====================================
+[Ee]xported[Oo]bj/
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln
+*.user
+*.unityproj
+*.booproj
+
+# Unity generated
+# ===============
+[Oo]bj/
+sysinfo.txt
+*.stackdump
