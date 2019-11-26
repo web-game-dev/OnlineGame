@@ -6,6 +6,8 @@ const axios = require('axios')
 
 const PORT = process.env.PORT || 5000
 const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
@@ -17,6 +19,23 @@ app.use(session({
     // cookie: { secure: true },
 }));
 /*******/
+
+//Code for socket.io chatbox
+io.sockets.on('connection', function(socket) {
+    socket.on('username', function(username) {
+        socket.username = username;
+        io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
+    }); //if online
+
+    socket.on('disconnect', function(username) {
+            io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
+        }) //if offline
+
+    socket.on('chat_message', function(message) {
+        io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
+    }); //text message
+
+});
 
 /*** Authentication & Authorization Middleware ***/
 const auth = function(req, res, next) {
@@ -39,8 +58,8 @@ app.get('/', (req, res) => {
     else res.redirect('signin')
 });
 app.get('/signin', loggedInAlert, (req, res) => res.render('pages/signIn'));
-app.get('/signup', loggedInAlert, (req,res) => res.render('pages/register'));
-app.get('/logout', function (req, res) {
+app.get('/signup', loggedInAlert, (req, res) => res.render('pages/register'));
+app.get('/logout', function(req, res) {
     req.session.destroy();
     res.send("Logout Successful!");
 });
@@ -50,17 +69,17 @@ app.get('/demo', (req, res) => res.render("pages/demo"));
 
 /*** POST Requests ***/
 // Login
-app.post('/login', async (req, res) => {
+app.post('/login', async(req, res) => {
     const login_uri = "https://dungeon-crawler-back-end.herokuapp.com/auth/login";
     // const name = req.body.username;
     const email = req.body.email;
     const pw = req.body.password;
     const data = {
-        // "name": name,
-        "email": email,
-        "password": pw,
-    }
-    // console.log("DATA is " + JSON.stringify(data));
+            // "name": name,
+            "email": email,
+            "password": pw,
+        }
+        // console.log("DATA is " + JSON.stringify(data));
 
     await axios.post(login_uri, data)
         .then(axiosResp => {
@@ -72,7 +91,7 @@ app.post('/login', async (req, res) => {
             // console.log(req.session);
             res.redirect("/game");
         })
-            .catch(error => {
+        .catch(error => {
             console.error("ERROR:", error.response);
             // alert(error.response.data);
             res.status(401).send(error.response.data + ". Please return to the previous page and try again.");
@@ -81,17 +100,17 @@ app.post('/login', async (req, res) => {
 });
 
 // Registration
-app.post('/register', async (req, res) => {
+app.post('/register', async(req, res) => {
     const register_uri = "https://dungeon-crawler-back-end.herokuapp.com/auth/register";
     const name = req.body.username;
     const email = req.body.email;
     const pw = req.body.password;
     const data = {
-        "name": name,
-        "email": email,
-        "password": pw,
-    }
-    // console.log("DATA is " + JSON.stringify(data));
+            "name": name,
+            "email": email,
+            "password": pw,
+        }
+        // console.log("DATA is " + JSON.stringify(data));
 
     await axios.post(register_uri, data)
         .then(axiosResp => {
