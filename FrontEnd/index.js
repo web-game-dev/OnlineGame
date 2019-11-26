@@ -65,7 +65,8 @@ app.get('/logout', function(req, res) {
 });
 app.get('/game', auth, (req, res) => res.render("pages/demo"));
 app.get('/demo', (req, res) => res.render("pages/demo"));
-/*******/
+app.get('/chatbox', auth, (req, res) => res.render("pages/chatbox"))
+    /*******/
 
 /*** POST Requests ***/
 // Login
