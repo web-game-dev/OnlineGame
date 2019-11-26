@@ -25,14 +25,15 @@ app.use(session({
     name: "dungeonCrawler",
 }));
 
-// db connection
-// const db = config.get('db');
+// db connections
+const db = config.get('db');
 
 // test db
-const db = "mongodb://localhost/dungeonCrawler_test";
+// const db = "mongodb://localhost/dungeonCrawler_test";
+
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
   .then(() => {
-    console.log(`Connected to ${db}...`);
+    console.log(`Connected to db...`);
   })
   .catch(err => {
     console.log('Could not connect to mongodb', err);
