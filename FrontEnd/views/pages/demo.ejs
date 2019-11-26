@@ -7,6 +7,7 @@
     <title>Unity WebGL Player | Game</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="stylesheet" href="css/chatbox.css">
     <script src="TemplateData/UnityProgress.js"></script>
     <script src="Build/UnityLoader.js"></script>
     <script>
@@ -14,81 +15,16 @@
             onProgress: UnityProgress
         });
     </script>
-    <style>
-        chatbox {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font: 13px Helvetica, Arial;
-        }
-        
-        form {
-            background: #fff;
-            padding: 3px;
-            position: fixed;
-            bottom: 0;
-            width: 15%;
-            border-color: #000;
-            border-top-style: solid;
-            border-top-width: 1px;
-        }
-        
-        form input {
-            border-style: solid;
-            border-width: 1px;
-            padding: 10px;
-            width: 85%;
-            margin-right: .5%;
-        }
-        
-        form button {
-            width: 30%;
-            background: rgb(130, 224, 255);
-            border: none;
-            padding: 10px;
-            margin-left: 2%;
-        }
-        
-        #messages {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-        
-        #messages li {
-            padding: 5px 10px;
-        }
-        
-        #messages li:nth-child(odd) {
-            background: #eee;
-        }
-    </style>
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 </head>
 
-<form action='/logout' onsubmit="return confirm('Are you sure you want to log out?')">
-    <input type='submit' value='Logout' , id="logoutBtn" style="width:10%;padding:10px 20px;margin: 2px 1px;font-size:15px;cursor:pointer;" />
-</form>
-
-<div id="chatbox"></div>
-<ul id="messages"></ul>
-<form action="/" method="POST" id="chatForm">
-    <input id="txt" autocomplete="off" autofocus="on" placeholder="type your message here..." /><button>Send</button>
-</form>
-<script>
-    // submit text message without reload/refresh the page
-    $('form').submit(function(e) {
-        e.preventDefault(); // prevents page reloading
-        $('#txt').val('');
-        return false;
-    });
-</script>
-
 <body>
+    <div id="logout" style="float: right; width:30%; ">
+        <form action='/logout' onsubmit="return confirm('Are you sure you want to log out?')">
+            <input type='submit' value='Logout' , id="logoutBtn" style="width:10%;padding:10px 20px;margin: 2px 1px;font-size:15px;cursor:pointer;" />
+        </form>
+    </div>
     <div class="webgl-content">
         <div id="gameContainer" style="width: 960px; height: 600px"></div>
         <div class="footer">
