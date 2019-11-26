@@ -132,4 +132,4 @@ app.post('/register', async(req, res) => {
 });
 /*******/
 
-app.listen(PORT, () => console.log(`Listening on ${ PORT }...`))
+http.listen(PORT, () => console.log(`Listening on ${ PORT }...`))
