@@ -13,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Wall
   - 
   - 
   - 
@@ -40,4 +40,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 853012565
+    locked: 0
+  - name: Walls
+    uniqueID: 429972559
+    locked: 0
+  - name: Characters
+    uniqueID: 3112868003
     locked: 0
