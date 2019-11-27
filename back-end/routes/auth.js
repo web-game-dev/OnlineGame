@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
 
   const token = user.generateAuthToken();
   
-  req.session.id = token;
+  req.session.token = token;
   req.session.loggedin = true;
   req.session.secret = config.get('sessionSecret');
   req.session.name = user.local.name;
@@ -63,8 +63,8 @@ router.post('/register', async (req, res) => {
   });
 
   const token = user.generateAuthToken();
-  console.log(token);
-  
+
+  req.session.token = token;
   req.session.loggedin = true;
   req.session.secret = config.get('sessionSecret');
   req.session.name = req.body.name;
@@ -81,9 +81,11 @@ router.get('/google', passport.authenticate('google', {
 // this is handeled on the backend
 router.get('/google/redirect', passport.authenticate('google', { session: false }), (req, res) => {
   const { name, email } = req.user.google;
-  // console.log(name, email);
-  // const token = user.generateAuthToken();
-  // req.
+  const user = req.user;
+  
+  const token = user.generateAuthToken();
+
+  req.session.token = token;
   req.session.loggedin = true;
   req.session.secret = config.get('sessionSecret');
   req.session.name = name;
