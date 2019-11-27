@@ -79,7 +79,7 @@ app.get('/logout', function (req, res) {
     req.session.destroy();
     res.redirect('/signin');
 });
-app.get('/demo', auth, (req, res) => res.render("pages/demo"));
+app.get('/demo', auth, (req, res) => res.render("pages/demo", { name: req.session.name}));
 
 app.use('/auth', authRoute);
 
