@@ -26,19 +26,30 @@ app.use(session({
 }));
 
 // db connections
-const db = config.get('db');
 
-// test db
-// const db = "mongodb://localhost/dungeonCrawler_test";
+if (process.env.NODE_ENV === 'development') {
+  const db = config.get('db');
+  mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() => {
+      console.log(`Connected to ${db}...`);
+    })
+    .catch(err => {
+      console.log('Could not connect to mongodb', err);
+    });
+}
 
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
-  .then(() => {
-    console.log(`Connected to db...`);
-  })
-  .catch(err => {
-    console.log('Could not connect to mongodb', err);
-  });
+if (process.env.NODE_ENV === 'test') {
+  const db = "mongodb://localhost/dungeonCrawler_test";
+  mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() => {
+      console.log(`Connected to ${db}...`);
+    })
+    .catch(err => {
+      console.log('Could not connect to mongodb', err);
+    });
+}
 
+// server connection
 const server = app.listen(PORT, () => console.log(`Listening on ${ PORT }...`));
 
 /*** Authentication & Authorization Middleware ***/

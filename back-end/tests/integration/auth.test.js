@@ -1,3 +1,4 @@
+const { MongoClient } = require('mongodb');
 const request = require('supertest');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -5,8 +6,10 @@ const config = require('config');
 const { User } = require('../../models/user');
 
 let server;
+process.env.NODE_ENV='test';
 
 describe('/auth', () => {
+
   beforeEach(() => { server = require('../../../index')});
   afterEach(async () => {
     await server.close();
