@@ -16,15 +16,15 @@ if(!config.get('clientSecret')) {
 
 passport.use(new GoogleStrategy({
   // callbackURL: 'https://dungeon-crawler-back-end.herokuapp.com/auth/google/redirect',
-  callbackURL: 'http://localhost:3000/auth/google/redirect',
+  callbackURL: '/auth/google/redirect',
   clientID: config.get('clientID'),
   clientSecret: config.get('clientSecret'),
 }, async (accessToken, refreshToken, profile, done) => {
     let user = await User.findOne({ "google.googleId": profile.id });
     const localUser = await User.findOne({ "local.email": profile.emails[0].value});
-    
+
     if (user || localUser) {
-      return done(null, user); 
+      return done(null, user);
     }
     else {
       user = new User({
