@@ -1,3 +1,4 @@
+/*** Variables & System Settings ***/
 const express = require('express')
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -9,6 +10,8 @@ const authRoute = require('./back-end/routes/auth');
 
 const PORT = process.env.PORT || 3000
 const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 if (!config.get('sessionSecret')) {
   console.log('FATAL sessionSecret IS MISSING');
@@ -23,10 +26,16 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     name: "dungeonCrawler",
+    // cookie: { secure: true },
 }));
+app.use('/auth', authRoute);
+/*******/
 
-// db connections
+/*** Server Connection ***/
+const server = http.listen(PORT, () => console.log(`Listening on ${ PORT }...`))
+/*******/
 
+/*** MongoDB Connections ***/
 if (process.env.NODE_ENV === 'development') {
   const db = config.get('db');
   mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
@@ -48,9 +57,25 @@ if (process.env.NODE_ENV === 'test') {
       console.log('Could not connect to mongodb', err);
     });
 }
+/*******/
 
-// server connection
-const server = app.listen(PORT, () => console.log(`Listening on ${ PORT }...`));
+/*** Socket.io TCP Connection (Chatbox) ***/
+io.sockets.on('connection', function(socket) {
+    socket.on('username', function(username) {
+        socket.username = username;
+        io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
+    }); //if online
+
+    socket.on('disconnect', function(username) {
+            io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
+        }) //if offline
+
+    socket.on('chat_message', function(message) {
+        io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
+    }); //text message
+
+});
+/*******/
 
 /*** Authentication & Authorization Middleware ***/
 const auth = function(req, res, next) {
@@ -80,7 +105,6 @@ app.get('/logout', function (req, res) {
     res.redirect('/signin');
 });
 app.get('/demo', auth, (req, res) => res.render("pages/demo", { name: req.session.name}));
-
-app.use('/auth', authRoute);
+/*******/
 
 module.exports = server;
