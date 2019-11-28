@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
   if (!validPassword) return res.status(400).send('Invalid password');
 
   const token = user.generateAuthToken();
-  
+
   req.session.token = token;
   req.session.loggedin = true;
   req.session.secret = config.get('sessionSecret');
@@ -82,7 +82,7 @@ router.get('/google', passport.authenticate('google', {
 router.get('/google/redirect', passport.authenticate('google', { session: false }), (req, res) => {
   const { name, email } = req.user.google;
   const user = req.user;
-  
+
   const token = user.generateAuthToken();
 
   req.session.token = token;
