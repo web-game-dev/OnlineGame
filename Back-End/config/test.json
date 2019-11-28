@@ -1,6 +1,0 @@
-{
-  "clientID": "dungeon_client_id",
-  "clientSecret": "dungeon_client_secret",
-  "db": "mongodb://localhost/dungeonCrawler_tests",
-  "jwtPrivateKey": "dungeon_jwt_key"
-}
