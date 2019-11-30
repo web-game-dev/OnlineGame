@@ -6,9 +6,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Chatbox</title>
     <link rel="stylesheet" href="css/chatbox.css">
-    <script src="../../socket.io/socket.io.js"></script>
-    <!-- <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script> -->
+    <script src="/socket.io/socket.io.js"></script>
     <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!-- <script src="/jquery/dist/jquery.min.js"></script> -->
 </head>
 
 <body>
@@ -23,8 +23,10 @@
             // submit text message without reload/refresh the page
             $('.chatForm').submit(function(e) {
                 e.preventDefault(); // prevents page reloading
-                socket.emit('chat_message', $('#txt').val());
-                $('#txt').val('');
+                if ($('#txt').val() != '') {
+                  socket.emit('chat_message', $('#txt').val());
+                  $('#txt').val('');
+                }
                 return false;
             });
             // append the chat text message
