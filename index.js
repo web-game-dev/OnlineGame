@@ -10,7 +10,7 @@ const http = require('http');
 const passportSetup = require('./back-end/oauthStrategy/passport-google-strategy');
 const authRoute = require('./back-end/routes/auth');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 const app = express();
 const httpServer = http.Server(app);
 const io = socketIO(httpServer);
@@ -21,6 +21,7 @@ if (!config.get('sessionSecret')) {
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
