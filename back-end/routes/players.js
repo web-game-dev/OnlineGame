@@ -26,4 +26,11 @@ router.post('/create', auth, async (req, res) => {
   console.log('player created', result);
 });
 
+// Retrieve player that is logged in
+router.get('/get', auth, async (req, res) => {
+  const id = tokenDecode(req)._id;
+  const player = await Player.findOne({ userId: id}).select('-_id -userId -__v');
+  res.send(player);
+});
+
 module.exports = router;
