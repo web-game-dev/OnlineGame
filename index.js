@@ -5,13 +5,15 @@ const session = require('express-session');
 const path = require('path');
 const axios = require('axios');
 const config = require('config');
+const socketIO = require('socket.io');
+const http = require('http');
 const passportSetup = require('./back-end/oauthStrategy/passport-google-strategy');
 const authRoute = require('./back-end/routes/auth');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const httpServer = http.Server(app);
+const io = socketIO(httpServer);
 
 if (!config.get('sessionSecret')) {
   console.log('FATAL sessionSecret IS MISSING');
@@ -19,6 +21,7 @@ if (!config.get('sessionSecret')) {
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
@@ -32,7 +35,7 @@ app.use('/auth', authRoute);
 /*******/
 
 /*** Server Connection ***/
-const server = http.listen(PORT, () => console.log(`Listening on ${ PORT }...`));
+const server = httpServer.listen(PORT, () => console.log(`Listening on ${ PORT }...`));
 /*******/
 
 /*** MongoDB Connections ***/
@@ -63,10 +66,10 @@ if (process.env.NODE_ENV === 'test') {
 io.sockets.on('connection', function(socket) {
     socket.on('username', function(username) {
         socket.username = username;
-        io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
+        io.emit('is_online', '🔵 <i>' + socket.username + ' has joined the chat..</i>');
     });
     socket.on('disconnect', function(username) {
-            io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
+        io.emit('is_online', '🔴 <i>' + socket.username + ' has left the chat..</i>');
     });
     socket.on('chat_message', function(message) {
         io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
@@ -103,7 +106,7 @@ app.get('/logout', function (req, res) {
 });
 app.get('/demo', auth, (req, res) => res.render("pages/demo", { name: req.session.name}));
 app.get('/game', auth, (req, res) => res.render("pages/demo", { name: req.session.name}));
-app.get('/chatbox', auth, (req, res) => res.render("pages/chatbox"));
+app.get('/chatbox', auth, (req, res) => res.render("pages/chatbox", { name: req.session.name}));
 /*******/
 
 module.exports = server;
