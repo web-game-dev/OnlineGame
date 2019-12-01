@@ -47,8 +47,19 @@ if (process.env.NODE_ENV === 'development') {
     });
 }
 
+if (process.env.NODE_ENV === 'remote') {
+  const db = config.get('db_local');
+  mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() => {
+      console.log(`Connected to MongoDB ${db}...`);
+    })
+    .catch(err => {
+      console.log('Could not connect to MongoDB', err);
+    });
+}
+
 if (process.env.NODE_ENV === 'test') {
-  const db = "mongodb://localhost/dungeonCrawler_test";
+  const db = config.get('db_test');
   mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
       console.log(`Connected to ${db}...`);
