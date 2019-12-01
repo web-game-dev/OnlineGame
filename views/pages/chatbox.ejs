@@ -39,7 +39,8 @@
             });
             // ask username
             // var username = prompt('Please tell me your name');
-            var username = <%= name %>; // pass in username
+            // var username = <%= name %> ; // pass in username
+            var username = <%- JSON.stringify(name) %> ; // pass in username
             socket.emit('username', username);
         </script>
     </div>
