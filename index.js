@@ -15,12 +15,12 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 const httpServer = http.Server(app);
 const io = socketIO(httpServer);
+mongoose.set('useFindAndModify', false);
 
 if (!config.get('sessionSecret')) {
   console.log('FATAL sessionSecret IS MISSING');
   process.exit(1);
 }
-
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(express.json());
