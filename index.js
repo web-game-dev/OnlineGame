@@ -7,6 +7,7 @@ const axios = require('axios');
 const config = require('config');
 const passportSetup = require('./back-end/oauthStrategy/passport-google-strategy');
 const authRoute = require('./back-end/routes/auth');
+const players = require('./back-end/routes/players');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -28,8 +29,12 @@ app.use(session({
     name: "dungeonCrawler",
     // cookie: { secure: true },
 }));
-app.use('/auth', authRoute);
 /*******/
+
+/*** routes ***/
+app.use('/auth', authRoute);
+app.use('/player', players);
+/******/
 
 /*** Server Connection ***/
 const server = http.listen(PORT, () => console.log(`Listening on ${ PORT }...`));
