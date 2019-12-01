@@ -9,8 +9,9 @@ const socketIO = require('socket.io');
 const http = require('http');
 const passportSetup = require('./back-end/oauthStrategy/passport-google-strategy');
 const authRoute = require('./back-end/routes/auth');
+const Player = require('./Classes/Player.js');
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 5000;
 const app = express();
 const httpServer = http.Server(app);
 const io = socketIO(httpServer);
@@ -62,14 +63,38 @@ if (process.env.NODE_ENV === 'test') {
 }
 /*******/
 
-/*** Socket.io TCP Connection (Chatbox) ***/
+/*** Socket.io TCP Connection (Chatbox & Unity) ***/
+var players = [];
+var pSockets = [];
 io.sockets.on('connection', function(socket) {
+    console.log('Socket connection has been made');
+    // Unity Data
+    let player = new Player();
+    let thisPlayerID = player.id;
+    players[thisPlayerID] = player;
+    pSockets[thisPlayerID] = socket;
+
+    // Events: server to client
+    socket.emit('register', {id: thisPlayerID}); // id to client
+    socket.emit('spawn', player); // self to self
+    socket.broadcast.emit('spawn', player); // self to others
+    for (var playerID in players) {
+      if (playerID != thisPlayerID) {
+        socket.emit('spawn', players[playerID]); // others to self
+      }
+    }
+
+    // Events: client to server
     socket.on('username', function(username) {
         socket.username = username;
         io.emit('is_online', '🔵 <i>' + socket.username + ' has joined the chat..</i>');
     });
     socket.on('disconnect', function(username) {
         io.emit('is_online', '🔴 <i>' + socket.username + ' has left the chat..</i>');
+        delete players[thisPlayerID];
+        delete pSockets[thisPlayerID];
+        socket.broadcast.emit('disconnected', player);
+        console.log(socket.username+' has disconnected');
     });
     socket.on('chat_message', function(message) {
         io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
