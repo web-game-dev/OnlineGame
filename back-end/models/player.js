@@ -27,7 +27,8 @@ function validatePlayer(player) {
   const schema = {
     health: Joi.number().required(),
     exp: Joi.number().required(),
-    level: Joi.number().required()
+    level: Joi.number().required(),
+    userId: Joi.required(),
   };
   return Joi.validate(player, schema);
 }
