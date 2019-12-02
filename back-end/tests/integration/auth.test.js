@@ -1,3 +1,4 @@
+const { MongoClient } = require('mongodb');
 const request = require('supertest');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -15,6 +16,7 @@ describe('/auth', () => {
     await User.remove({});
   });
 
+  
   const user = {
     name: 'test',
     email: 'test@hotmail.com',

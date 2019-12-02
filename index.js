@@ -9,18 +9,17 @@ const socketIO = require('socket.io');
 const http = require('http');
 const passportSetup = require('./back-end/oauthStrategy/passport-google-strategy');
 const authRoute = require('./back-end/routes/auth');
-const players = require('./back-end/routes/players');
 
 const PORT = process.env.PORT || 8080;
 const app = express();
 const httpServer = http.Server(app);
 const io = socketIO(httpServer);
-mongoose.set('useFindAndModify', false);
 
 if (!config.get('sessionSecret')) {
   console.log('FATAL sessionSecret IS MISSING');
   process.exit(1);
 }
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(express.json());
@@ -32,12 +31,8 @@ app.use(session({
     name: "dungeonCrawler",
     // cookie: { secure: true },
 }));
-/*******/
-
-/*** routes ***/
 app.use('/auth', authRoute);
-app.use('/player', players);
-/******/
+/*******/
 
 /*** Server Connection ***/
 const server = httpServer.listen(PORT, () => console.log(`Listening on ${ PORT }...`));
@@ -55,19 +50,8 @@ if (process.env.NODE_ENV === 'development') {
     });
 }
 
-if (process.env.NODE_ENV === 'remote') {
-  const db = config.get('db_local');
-  mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
-    .then(() => {
-      console.log(`Connected to MongoDB ${db}...`);
-    })
-    .catch(err => {
-      console.log('Could not connect to MongoDB', err);
-    });
-}
-
 if (process.env.NODE_ENV === 'test') {
-  const db = config.get('db_test');
+  const db = "mongodb://localhost/dungeonCrawler_test";
   mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
       console.log(`Connected to ${db}...`);
