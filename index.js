@@ -9,9 +9,10 @@ const socketIO = require('socket.io');
 const http = require('http');
 const passportSetup = require('./back-end/oauthStrategy/passport-google-strategy');
 const authRoute = require('./back-end/routes/auth');
-const players = require('./back-end/routes/players');
+const Player = require('./Classes/Player.js');
+const playersModel = require('./back-end/routes/players');
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 5000;
 const app = express();
 const httpServer = require('http').Server(app);
 const io = require('socket.io')(httpServer);
@@ -25,18 +26,42 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(session({
+sessionMiddleware = session({
     secret: config.get('sessionSecret'),
     resave: true,
     saveUninitialized: true,
     name: "dungeonCrawler",
     // cookie: { secure: true },
-}));
+});
+app.use(sessionMiddleware);
+app.use('/auth', authRoute);
+
+// Temporary set up for socket-session connection
+// const cookieParser = require('cookie-parser')();
+// const passport = require('passport');
+// const passInit = passport.initialize();
+// const passSession = passport.session();
+//
+// io.use(function(socket, next) {
+//   socket.client.request.originalUrl = socket.client.request.url;
+//   sessionMiddleware(socket.client.request, socket.client.request.res, next);
+// });
+// io.use(function(socket, next) {
+//   socket.client.request.originalUrl = socket.client.request.url;
+//   cookieParser(socket.client.request, socket.client.request.res, next);
+// });
+// io.use(function(socket, next) {
+//   passInit(socket.client.request, socket.client.request.res, next);
+// });
+// io.use(function(socket, next) {
+//   passSession(socket.client.request, socket.client.request.res, next);
+// });
+//////
 /*******/
 
 /*** routes ***/
 app.use('/auth', authRoute);
-app.use('/player', players);
+app.use('/player', playersModel);
 /******/
 
 /*** Server Connection ***/
@@ -78,17 +103,51 @@ if (process.env.NODE_ENV === 'test') {
 }
 /*******/
 
-/*** Socket.io TCP Connection (Chatbox) ***/
+/*** Socket.io TCP Connection (Chatbox & Unity) ***/
+// Server side storage lists
+var playersList = [];
+var pSockets = [];
 io.sockets.on('connection', function(socket) {
+    console.log('Socket connection has been made');
+    // Game Data (Unity)
+    // let player = new Player(socket.request.session.name, socket.request.session.token);
+    let player = new Player();
+    let thisPlayerID = player.id;
+    playersList[thisPlayerID] = player;
+    pSockets[thisPlayerID] = socket;
+
+    /* Events: server to client */
+    socket.emit('register', {id: thisPlayerID}); // id to client
+    socket.emit('spawn', player); // self to self
+    socket.broadcast.emit('spawn', player); // self to others
+    for (var playerID in playersList) {
+      if (playerID != thisPlayerID) {
+        socket.emit('spawn', playersList[playerID]); // others to self
+      }
+    }
+
+    /* Events: client to server & back */
+    // Chatbox
     socket.on('username', function(username) {
         socket.username = username;
         io.emit('is_online', '🟢 <i><b>' + socket.username + '</b> has joined the chat..</i>');
     });
-    socket.on('disconnect', function(username) {
-        io.emit('is_online', '🔴 <i><b>' + socket.username + '</b> has left the chat..</i>');
-    });
     socket.on('chat_message', function(message) {
         io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
+    });
+    // Game
+    socket.on('updatePosition', function(data) {
+      player.position.x = data.position.x;
+      player.position.y = data.position.y;
+      socket.broadcast.emit('updatePosition', player);
+    });
+    // All
+    socket.on('disconnect', function(username) {
+      io.emit('is_online', '🔴 <i><b>' + socket.username + '</b> has left the chat..</i>');
+      delete playersList[thisPlayerID];
+      delete pSockets[thisPlayerID];
+      socket.broadcast.emit('disconnected', player);
+      console.log(socket.username+' has disconnected');
     });
 });
 /*******/
