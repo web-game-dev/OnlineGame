@@ -2,6 +2,8 @@
   "clientID": "dungeon_client_id",
   "clientSecret": "dungeon_client_secret",
   "db": "dungeon_db",
+  "db_test": "dungeon_db_test",
+  "db_local": "dungeon_db_local",
   "jwtPrivateKey": "dungeon_jwt_key",
   "sessionSecret": "dungeon_session_secret"
 }

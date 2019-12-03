@@ -10,17 +10,18 @@ const http = require('http');
 const passportSetup = require('./back-end/oauthStrategy/passport-google-strategy');
 const authRoute = require('./back-end/routes/auth');
 const Player = require('./Classes/Player.js');
+const playersModel = require('./back-end/routes/players');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
-const httpServer = http.Server(app);
-const io = socketIO(httpServer);
+const httpServer = require('http').Server(app);
+const io = require('socket.io')(httpServer);
+mongoose.set('useFindAndModify', false);
 
 if (!config.get('sessionSecret')) {
   console.log('FATAL sessionSecret IS MISSING');
   process.exit(1);
 }
-
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(express.json());
@@ -58,6 +59,11 @@ app.use('/auth', authRoute);
 //////
 /*******/
 
+/*** routes ***/
+app.use('/auth', authRoute);
+app.use('/player', playersModel);
+/******/
+
 /*** Server Connection ***/
 const server = httpServer.listen(PORT, () => console.log(`Listening on ${ PORT }...`));
 /*******/
@@ -74,8 +80,19 @@ if (process.env.NODE_ENV === 'development') {
     });
 }
 
+if (process.env.NODE_ENV === 'remote') {
+  const db = config.get('db_local');
+  mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() => {
+      console.log(`Connected to MongoDB ${db}...`);
+    })
+    .catch(err => {
+      console.log('Could not connect to MongoDB', err);
+    });
+}
+
 if (process.env.NODE_ENV === 'test') {
-  const db = "mongodb://localhost/dungeonCrawler_test";
+  const db = config.get('db_test');
   mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
       console.log(`Connected to ${db}...`);
@@ -88,7 +105,7 @@ if (process.env.NODE_ENV === 'test') {
 
 /*** Socket.io TCP Connection (Chatbox & Unity) ***/
 // Server side storage lists
-var players = [];
+var playersList = [];
 var pSockets = [];
 io.sockets.on('connection', function(socket) {
     console.log('Socket connection has been made');
@@ -96,24 +113,24 @@ io.sockets.on('connection', function(socket) {
     // let player = new Player(socket.request.session.name, socket.request.session.token);
     let player = new Player();
     let thisPlayerID = player.id;
-    players[thisPlayerID] = player;
+    playersList[thisPlayerID] = player;
     pSockets[thisPlayerID] = socket;
 
     /* Events: server to client */
     socket.emit('register', {id: thisPlayerID}); // id to client
     socket.emit('spawn', player); // self to self
     socket.broadcast.emit('spawn', player); // self to others
-    for (var playerID in players) {
+    for (var playerID in playersList) {
       if (playerID != thisPlayerID) {
-        socket.emit('spawn', players[playerID]); // others to self
+        socket.emit('spawn', playersList[playerID]); // others to self
       }
     }
 
     /* Events: client to server & back */
     // Chatbox
     socket.on('username', function(username) {
-        socket.username = player.username;
-        io.emit('is_online', '🔵 <i>' + socket.username + ' has joined the chat..</i>');
+        socket.username = username;
+        io.emit('is_online', '🟢 <i><b>' + socket.username + '</b> has joined the chat..</i>');
     });
     socket.on('chat_message', function(message) {
         io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
@@ -126,8 +143,8 @@ io.sockets.on('connection', function(socket) {
     });
     // All
     socket.on('disconnect', function(username) {
-      io.emit('is_online', '🔴 <i>' + socket.username + ' has left the chat..</i>');
-      delete players[thisPlayerID];
+      io.emit('is_online', '🔴 <i><b>' + socket.username + '</b> has left the chat..</i>');
+      delete playersList[thisPlayerID];
       delete pSockets[thisPlayerID];
       socket.broadcast.emit('disconnected', player);
       console.log(socket.username+' has disconnected');
@@ -163,8 +180,9 @@ app.get('/logout', function (req, res) {
     res.redirect('/signin');
 });
 app.get('/demo', auth, (req, res) => res.render("pages/demo", { name: req.session.name}));
-app.get('/game', auth, (req, res) => res.render("pages/demo", { name: req.session.name}));
+app.get('/game', auth, (req, res) => res.render("pages/game", { name: req.session.name}));
 app.get('/chatbox', auth, (req, res) => res.render("pages/chatbox", { name: req.session.name}));
+app.get('/revamp', auth, (req, res) => res.render("pages/main", { name: req.session.name}));
 /*******/
 
 module.exports = server;
