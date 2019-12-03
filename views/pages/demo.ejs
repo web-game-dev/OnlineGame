@@ -7,6 +7,7 @@
         <title>Dungeon Crawler</title>
         <link rel="shortcut icon" href="TemplateData/favicon.ico">
         <link rel="stylesheet" href="TemplateData/style.css">
+        <link rel="stylesheet" type="text/css" href="css/bg.css">
         <script src="TemplateData/UnityProgress.js"></script>
         <script src="Build/UnityLoader.js"></script>
         <script>
@@ -30,12 +31,14 @@
 
     <body>
         <div class="webgl-content">
+          <div class="container-bg" style="background-image: url('images/bg-03.jpg');">
             <div id="gameContainer" style="width: 960px; height: 600px"></div>
             <div class="footer">
                 <div class="webgl-logo"></div>
                 <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
                 <div class="title">Dungeon Crawler</div>
             </div>
+          </div>
         </div>
     </body>
 
